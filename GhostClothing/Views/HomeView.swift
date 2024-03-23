@@ -8,8 +8,6 @@
 import SwiftUI
 
 struct HomeView: View {
-    
-    
     var body: some View {
         
         TabView {
@@ -23,19 +21,21 @@ struct HomeView: View {
                            Image(systemName: "person")
                            Text("Account")
                        }
-                   ThirdView()
-                       .tabItem {
-                           Image(systemName: "heart")
-                           Text("Favourits")
-                       }
+                  
                    FourthView()
                        .tabItem {
                            Image(systemName: "cart")
                            Text("Cart")
                        }
+            ThirdView()
+                .tabItem {
+                    Image(systemName: "heart")
+                    Text("Favourits")
+                }
+            
                    
                }
-               .tabViewStyle(DefaultTabViewStyle())
+              .tabViewStyle(DefaultTabViewStyle())
                .edgesIgnoringSafeArea(.all)
     
         
@@ -57,17 +57,18 @@ struct SecondView: View {
 
 struct ThirdView: View {
     var body: some View {
-        Text("Third View")
+        Text("third view")
     }
 }
 
 struct FourthView: View {
     var body: some View {
-        Text("Fourth View")
+        Text("third view")
     }
 }
-
 
 #Preview {
     HomeView()
 }
+
+
