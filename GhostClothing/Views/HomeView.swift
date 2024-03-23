@@ -9,38 +9,42 @@ import SwiftUI
 
 struct HomeView: View {
     var body: some View {
-        
-        TabView {
-                   FirstView()
-                       .tabItem {
-                           Image(systemName: "house")
-                           Text("Home")
-                       }
-                   SecondView()
-                       .tabItem {
-                           Image(systemName: "person")
-                           Text("Account")
-                       }
-                  
-                   FourthView()
-                       .tabItem {
-                           Image(systemName: "cart")
-                           Text("Cart")
-                       }
-            ThirdView()
-                .tabItem {
-                    Image(systemName: "heart")
-                    Text("Favourits")
-                }
+       
             
-                   
-               }
-              .tabViewStyle(DefaultTabViewStyle())
-               .edgesIgnoringSafeArea(.all)
+        
+            TabView {
+                FirstView()
+                    .tabItem {
+                        Image(systemName: "house")
+                        Text("Home")
+                    }
+                SecondView()
+                    .tabItem {
+                        Image(systemName: "person")
+                        Text("Account")
+                    }
+                
+                
+                ThirdView()
+                    .tabItem {
+                        Image(systemName: "heart")
+                        Text("Favourits")
+                    }
+                
+                FourthView()
+                    .tabItem {
+                        Image(systemName: "cart")
+                        Text("Cart")
+                    }
+                
+            }
+            .tabViewStyle(DefaultTabViewStyle())
+            .edgesIgnoringSafeArea(.all)
+        
+            
+            
+        }
     
-        
-        
-    }
             
     }
 struct FirstView: View {
@@ -57,13 +61,15 @@ struct SecondView: View {
 
 struct ThirdView: View {
     var body: some View {
-        Text("third view")
+      Text("favourits")
     }
 }
 
 struct FourthView: View {
     var body: some View {
-        Text("third view")
+    //Text("Third view")
+    CartView()
+       
     }
 }
 

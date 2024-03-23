@@ -9,14 +9,23 @@ import SwiftUI
 
 struct HomeScreenView: View {
     @State private var text: String = ""
+
     
     var body: some View {
         VStack {
             VStack(spacing:30){
                 HStack(spacing:225){
                     Text("GClothing").bold().font(.headline).foregroundStyle(.blue)
-                    Image(systemName: "line.3.horizontal")
-                        .foregroundColor(.blue).bold()
+                    Button(action: {
+                        // Action when the button is tapped
+                      
+                        
+                    }) {
+                        Image(systemName: "cart")
+                            .foregroundColor(.blue).bold()
+                  
+                    }
+               
                 }
                
                 HStack {

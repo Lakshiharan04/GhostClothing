@@ -1,154 +1,231 @@
-//
-//  CartView.swift
-//  GhostClothing
-//
-//  Created by NIBMPC04PC02 on 2024-03-17.
-//
-
 import SwiftUI
 
 struct CartView: View {
+    @ObservedObject var VMCart : CartViewModel = CartViewModel()
+   
+    
     var body: some View {
-        VStack{
-            HStack(spacing:110){
-                Text("My Cart").bold().font(.title).foregroundStyle(.blue).frame(alignment: .leading)
+        NavigationView {
+            VStack {
+                StarterView()
                 
-                HStack{
-                    
-                    Button(action: {
-                        // Action when the button is tapped
-                    }) {
-                        
-                        Image(systemName: "xmark.bin.fill").foregroundColor(.red)
-                        Text("Remove all").bold().font(.system(size: 15)).foregroundStyle(.red).frame(alignment: .leading)
-                        
-                        
+                ScrollView(.vertical, showsIndicators: false) {
+                    VStack(spacing: 10) {
+                        ForEach(0..<3) { _ in
+                            CartProductView()
+                        }
                     }
                 }
-            }
-           
-                    ScrollView(.vertical, showsIndicators: false) {
-                        VStack(spacing:2) {
-                            ForEach(0..<5) { index in
-                                
-                                RoundedRectangle(cornerRadius: 10).frame(height:120).frame(width: 350)
-                                    .foregroundColor(.white)
-                                    .padding(10)
-                                    .shadow(radius: 5).overlay{
-                                        
-                                        CartProductView()
-                                        
-                                    }
-                            }
-                    }
-                       
-                    }.frame(height: 400).padding()
-                        
+                .padding()
+                
                 SummaryView()
-               
-            
+                
+                VStack {
+                    Button(action: {
+                        VMCart.isShowingCheckout = true
+                    }) {
+                        Text("Proceed to checkout").font(.system(size: 18))
+                    }
+                    .padding()
+                    
+                    NavigationLink(
+                        destination: CheckoutView(),
+                        isActive: $VMCart.isShowingCheckout,
+                        label: {
+                            EmptyView()
+                        }
+                    )
+                    .hidden()
+                }
+                Spacer()
+            }
+            .padding()
+            .navigationBarHidden(true)
+            .navigationTitle("Back")
         }
-        Spacer()
-  
-        }
-        
     }
+}
 
+struct StarterView: View {
+    var body: some View {
+        HStack {
+            Text("My Cart")
+                .font(.title)
+                .fontWeight(.bold)
+                .foregroundColor(.blue)
+            
+            Spacer()
+            
+            Button(action: {
+                // Action when the button is tapped
+            }) {
+                HStack {
+                    Image(systemName: "trash")
+                        .foregroundColor(.red)
+                    
+                    Text("Remove all")
+                        .fontWeight(.bold)
+                        .foregroundColor(.red)
+                }
+            }
+        }
+    }
+}
 
 struct CartProductView: View {
     @State private var count = 1
+    
     var body: some View {
-        
-        VStack {
-            VStack {
-                HStack(spacing:10){
-                    Image("dress1")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 100, height: 120)
-                    VStack(alignment: .leading){
-                        Text("Women's shirt").font(.system(size: 18))
-                        Text("Olive Green").font(.system(size: 13))
-                        Text("Size || M").font(.system(size: 13))
-                    }
-                    VStack(spacing:10){
-                        HStack (alignment: .center, spacing:12){
-                            Button(action: {
-                                // Decrease count by 1
-                                if count > 1 {
-                                    count -= 2
-                                }
-                            }) {
-                                Image(systemName: "minus.circle")
-                                    .font(.system(size: 15))
-                            }.disabled(count == 1)
-                            
-                            Text("\(count)") .font(.system(size: 16))
-                            
-                            Button(action: {
-                                // Increase count by 1
-                                count += 1
-                            }) {
-                                Image(systemName: "plus.circle")
-                                    .font(.system(size: 15))
-                            }.disabled(count == 5)
-                            
-                        }
-                        Button(action: {
-                            // Action when the button is tapped
-                        }) {
-                            
-                            Image(systemName: "xmark.bin.fill").foregroundColor(.red).font(.system(size: 15))
-                            Text("Remove").bold().font(.system(size: 12)).foregroundStyle(.red)
-                        }
-                    }
+        VStack(spacing: 10) {
+            HStack (spacing:15){
+                Image("dress1")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 100, height: 100)
+                
+                VStack(alignment: .leading) {
+                    Text("Women's shirt")
+                        .font(.system(size: 16))
                     
+                    Text("Olive Green")
+                        .font(.system(size: 13))
+                    
+                    Text("Size || M")
+                        .font(.system(size: 12))
+                }
+                
+                Spacer()
+                VStack(spacing: 15){
+                    StepperView(count: $count)
+                    Button(action: {
+                        // Action when the button is tapped
+                    }) {
+                        HStack{
+                            Image(systemName: "trash")
+                                .foregroundColor(.red)
+
+                        }
+                    }
+                }
+            }
+            
+            Divider()
+        }
+        .padding(.horizontal)
+    }
+}
+
+struct StepperView: View {
+    @Binding var count: Int
+    
+    var body: some View {
+        HStack(spacing: 5) {
+            Button(action: {
+                count = max(count - 1, 1)
+            }) {
+                Image(systemName: "minus.circle")
+            }
+            .disabled(count == 1)
+            
+            Text("\(count)")
+            
+            Button(action: {
+                count = min(count + 1, 5)
+            }) {
+                Image(systemName: "plus.circle")
+            }
+            .disabled(count == 5)
+        }
+        .font(.system(size: 18))
+    }
+}
+
+struct SummaryView: View {
+    @State private var isTextFieldVisible = false
+    @State private var promoCode = ""
+    @State private var isPromoApplied = false
+    @State private var isShowingNewView = false
+   
+
+    var body: some View {
+        VStack(spacing: 20) {
+            
+            HStack(alignment: .top, spacing: 5 ){
+                
+                Text("Summary").font(.system(size: 18)).bold().underline()
+                
+                Spacer()
+                
+                VStack(alignment: .trailing, spacing: 2) {
+                    Text("Total amount").font(.system(size: 16))
+                    Text("1950.00 LKR").font(.system(size: 18)).bold()
+                    Text("+Delivery charages").font(.system(size: 11))
+                    Text("Including tax").font(.system(size: 10)).foregroundColor(.gray)
                     
                 }
                 
-            }.frame(width: 320)
+                
+            }
+            Divider()
             
             
+            HStack(spacing:55) {
+                
+                Button(action: {
+                    isTextFieldVisible.toggle()
+                }) {
+                    HStack {
+                        Image(systemName: "percent").foregroundColor(.green).font(.system(size: 15))
+                        Text("Add promo code").foregroundColor(.green).font(.system(size: 15))
+                    }
+                    
+                }
+            }
             
+            if isTextFieldVisible {
+                HStack {
+                    TextField("Enter promo code", text: $promoCode)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .padding(.horizontal)
+                        .onChange(of: promoCode) { _ in
+                            isPromoApplied = false // Reset flag when text changes
+                        }
+                    
+                    Button(action: {
+                        isPromoApplied = true
+                        
+                    }) {
+                        Image(systemName: "checkmark.circle")
+                        Text("Check").font(.system(size: 12))
+                        
+                    }
+                    
+                }
+                
+                
+            }
             
+            if isPromoApplied {
+                
+                Text("Promo code applied: \(promoCode)")
+                    .foregroundColor(.green)
+            }
             
         }
-        }
+        
+       
+    }
  
 }
 
-struct SummaryView:View {
-    @State private var isTextFieldVisible = false
-    var body: some View {
-        VStack{
-            
-            RoundedRectangle(cornerRadius: 10).frame(height:120).frame(width: 350)
-                .foregroundColor(.white)
-                .padding(10)
-                .shadow(radius: 5).overlay{
-                    
-                    VStack{
-                        Text("Add promo code").font(.system(size: 15)).onTapGesture {
-                            isTextFieldVisible.toggle()
-                        }
-                        
-                        if isTextFieldVisible {
-                            TextField("Enter code here", text: .constant("")).font(.system(size: 15))
-                                .textFieldStyle(RoundedBorderTextFieldStyle()).frame(width: 200)
-                                
-                        }
-                    }
-             
-                }
+
+
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        NavigationView {
+            CartView()
+                .navigationBarTitle("", displayMode: .inline)
         }
-        
-        
-        
-        
     }
-    
-    
 }
-#Preview {
-    CartView()
-}
+

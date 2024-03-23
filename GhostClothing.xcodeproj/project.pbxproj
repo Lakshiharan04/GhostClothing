@@ -11,6 +11,8 @@
 		A532C7E72BA6D603009B0DA9 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A532C7E62BA6D603009B0DA9 /* ProfileView.swift */; };
 		A532C7E92BA6D9B4009B0DA9 /* UserViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A532C7E82BA6D9B4009B0DA9 /* UserViewModel.swift */; };
 		A532C7EB2BA6FD5E009B0DA9 /* CartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A532C7EA2BA6FD5E009B0DA9 /* CartView.swift */; };
+		A5AB2E1A2BAECBF500E59AFE /* CheckoutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5AB2E192BAECBF500E59AFE /* CheckoutView.swift */; };
+		A5AB2E1C2BAF066000E59AFE /* CartViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5AB2E1B2BAF066000E59AFE /* CartViewModel.swift */; };
 		A5E773002BA54AB70020895B /* GhostClothingApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5E772FF2BA54AB70020895B /* GhostClothingApp.swift */; };
 		A5E773042BA54AB90020895B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A5E773032BA54AB90020895B /* Assets.xcassets */; };
 		A5E773072BA54AB90020895B /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A5E773062BA54AB90020895B /* Preview Assets.xcassets */; };
@@ -24,6 +26,8 @@
 		A532C7E62BA6D603009B0DA9 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		A532C7E82BA6D9B4009B0DA9 /* UserViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewModel.swift; sourceTree = "<group>"; };
 		A532C7EA2BA6FD5E009B0DA9 /* CartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartView.swift; sourceTree = "<group>"; };
+		A5AB2E192BAECBF500E59AFE /* CheckoutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckoutView.swift; sourceTree = "<group>"; };
+		A5AB2E1B2BAF066000E59AFE /* CartViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartViewModel.swift; sourceTree = "<group>"; };
 		A5E772FC2BA54AB70020895B /* GhostClothing.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GhostClothing.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A5E772FF2BA54AB70020895B /* GhostClothingApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GhostClothingApp.swift; sourceTree = "<group>"; };
 		A5E773032BA54AB90020895B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -93,6 +97,7 @@
 			children = (
 				A5E773132BA555040020895B /* LoginViewModel.swift */,
 				A532C7E82BA6D9B4009B0DA9 /* UserViewModel.swift */,
+				A5AB2E1B2BAF066000E59AFE /* CartViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -105,6 +110,7 @@
 				A511D2A92BA6CC1C005238B9 /* HomeScreenView.swift */,
 				A532C7E62BA6D603009B0DA9 /* ProfileView.swift */,
 				A532C7EA2BA6FD5E009B0DA9 /* CartView.swift */,
+				A5AB2E192BAECBF500E59AFE /* CheckoutView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -189,8 +195,10 @@
 				A5E773162BA5567A0020895B /* LoginView.swift in Sources */,
 				A532C7E72BA6D603009B0DA9 /* ProfileView.swift in Sources */,
 				A532C7E92BA6D9B4009B0DA9 /* UserViewModel.swift in Sources */,
+				A5AB2E1C2BAF066000E59AFE /* CartViewModel.swift in Sources */,
 				A532C7EB2BA6FD5E009B0DA9 /* CartView.swift in Sources */,
 				A5E773142BA555040020895B /* LoginViewModel.swift in Sources */,
+				A5AB2E1A2BAECBF500E59AFE /* CheckoutView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
