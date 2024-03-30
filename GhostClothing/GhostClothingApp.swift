@@ -12,7 +12,7 @@ import SwiftUI
 struct GhostClothingApp: App {
     var body: some Scene {
         WindowGroup {
-            HomeView()
+            ContentView()
         }
     }
 }

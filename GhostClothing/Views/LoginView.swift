@@ -1,85 +1,113 @@
-//
-//  LoginView.swift
-//  GhostClothing
-//
-//  Created by NIBMPC04PC02 on 2024-03-16.
-//
-
 import SwiftUI
 
 struct LoginView: View {
-    @ObservedObject var VMLogin : LoginViewModel = LoginViewModel()
+    @ObservedObject var vmLogin: LoginViewModel = LoginViewModel()
+    @State private var showSignupScreen = false
+
     var body: some View {
-        ZStack{
-            LinearGradient(colors: [Color("Blue"),Color.blue.opacity(0.6)],startPoint: .bottomTrailing,endPoint: .topLeading).ignoresSafeArea()
-            
-            VStack{
-                Text("Ghost Clothing").bold().font(.system(size: 32)).foregroundStyle(.white)
-                Spacer()
-                RoundedRectangle(cornerRadius: 14).foregroundColor(.white).frame(height: 400).padding(30)
-                    .overlay{
-                        VStack(spacing:15) {
-                            RoundedRectangle(cornerRadius: 5)
-                                .stroke(lineWidth: 0.2)
-                                .frame(height:50).padding(.horizontal,48)
-                                .overlay{
-                                    HStack{
-                                        Image(systemName: "person")
-                                            .foregroundColor(.gray)
-                                        TextField("Username",text:$VMLogin.username)
-                                    }.padding(.horizontal,56)
-                                }
-                            
-                            
-                            RoundedRectangle(cornerRadius: 5)
-                                .stroke(lineWidth: 0.2)
-                                .frame(height:50).padding(.horizontal,48)
-                                .overlay{
-                                    HStack{
-                                        Image(systemName: "lock")
-                                            .foregroundColor(.gray)
-                                        SecureField("Password",text:$VMLogin.password)
-                                    }.padding(.horizontal,56)
-                                    
-                                }
-                         
-                                    Button(action:{
-                                        VMLogin
-                                        .verifyLogin()}
-                                           ,label: {
-                                        RoundedRectangle(cornerRadius: 25).frame(height:50).frame(width: 250)
-                                            .padding(.horizontal,47)
-                                            .padding(.top)
-                                            .foregroundStyle(LinearGradient(colors:[Color.blue,Color.teal.opacity(0.7)],startPoint: .bottom,endPoint: .top)
-                                            )}).overlay{
-                                                Text("Login").bold()
-                                                    .foregroundStyle(.white)
-                                                    .padding(.top)
-                                            }
-                
+        VStack {
+            Text("Login")
+                .bold()
+                .font(.system(size: 36))
+                .offset(x: -0)
+
+            VStack(spacing: 25) {
+                RoundedRectangle(cornerRadius: 15)
+                    .stroke(lineWidth: 1)
+                    .foregroundColor(.blue)
+                    .frame(height: 50)
+                    .padding(.horizontal, 48)
+                    .overlay {
+                        HStack {
+                            Image(systemName: "person")
+                                .foregroundColor(.blue)
+                            TextField("Username", text: $vmLogin.username)
                         }
-                        
+                        .padding(.horizontal, 56)
                     }
-                Spacer()
-                if VMLogin.showError {
-                    RoundedRectangle(cornerRadius: 10)
-                        .frame(height: 100).padding(40)
-                        .foregroundColor(.white)
-                        .shadow(radius : 10)
+
+                RoundedRectangle(cornerRadius: 15)
+                    .stroke(lineWidth: 1)
+                    .foregroundColor(.blue)
+                    .frame(height: 50)
+                    .padding(.horizontal, 48)
+                    .overlay {
+                        HStack {
+                            Image(systemName: "lock")
+                                .foregroundColor(.blue)
+                            SecureField("Password", text: $vmLogin.password)
+                        }
+                        .padding(.horizontal, 56)
+                    }
+
+                Button(action: {
+                    vmLogin.verifyLogin()
+                }) {
+                    RoundedRectangle(cornerRadius: 35)
+                        .frame(height: 50)
+                        .padding(.horizontal, 47)
+                        .padding(.top)
+                        .foregroundColor(.blue)
                         .overlay {
-                            Text(VMLogin.errorMessage)
-                                .bold().foregroundStyle(.red)
-                                .padding(48)
+                            Text("Get Inside")
+                                .bold()
+                                .foregroundStyle(.white)
+                                .padding(.top)
                         }
                 }
-                
-               NavigationLink("", isActive: $VMLogin.success)
-               {Text("Hello lakshi")}
+                .offset(y: 20)
+
+                if vmLogin.showError {
+                    RoundedRectangle(cornerRadius: 25.0)
+                        .frame(height: 100)
+                        .padding(40)
+                        .foregroundColor(.black)
+                        .shadow(radius: 10)
+                        .overlay {
+                            Text(vmLogin.errorMessage)
+                                .bold()
+                                .foregroundStyle(.white)
+                                .padding(45)
+                        }
+                }
+                Spacer()
             }
+            .offset(y: 200)
+
+            NavigationLink("",isActive: $vmLogin.success)
+            {
+                HomeView()
+                
+            }
+            
+            Button(action: {}) {
+                Text("Forgotten Password?")
+                    .foregroundColor(.red)
+            }
+
+            HStack {
+                Text("Don't have an Account?")
+                Button(action: {
+                    showSignupScreen = true
+                   
+                }) {
+                    Text("Create Now!")
+                        .foregroundColor(.blue)
+                }
+                .buttonStyle(PlainButtonStyle())
+                .sheet(isPresented: $showSignupScreen) {
+                    SignupView()
+                }
+            }
+            .navigationBarBackButtonHidden(true)
         }
+       
     }
 }
 
-#Preview {
-    LoginView()
+struct LoginView_Previews: PreviewProvider {
+    static var previews: some View {
+        LoginView()
+    }
 }
+

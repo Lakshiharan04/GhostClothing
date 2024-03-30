@@ -5,4 +5,18 @@
 //  Created by NIBMPC04PC06 on 2024-03-30.
 //
 
-import Foundation
+import SwiftUI
+
+struct ContentView: View{
+    var body: some View{
+        NavigationView{
+            SplashScreen()
+        }
+        
+    }
+    
+
+}
+#Preview {
+    ContentView()
+}

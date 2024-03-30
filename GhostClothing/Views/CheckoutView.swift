@@ -28,8 +28,9 @@ struct CheckoutView: View {
                                     Text("Total amount").font(.system(size: 16))
                                     Text("2950.00 LKR").font(.system(size: 16)).bold().strikethrough()
                                     Text("Coupon applied").font(.system(size: 11)).foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
-                                    Text("1950.00 LKR").font(.system(size: 20)).bold().foregroundColor(.blue)
                                     Text("+Delivery charages").font(.system(size: 11))
+                                    Text("1950.00 LKR").font(.system(size: 20)).bold().foregroundColor(.blue)
+                                    
                                     Text("Including tax").font(.system(size: 10)).foregroundColor(.gray)
                                     
                                 }
@@ -39,6 +40,8 @@ struct CheckoutView: View {
                     AddCardView()
                     
                     SavedCardView()
+                    
+                    Addressbar()
                     
                     VStack{
                         
@@ -181,7 +184,24 @@ struct SavedCardView: View {
     }
 
 
-
+struct Addressbar: View {
+    @State private var addressLine = ""
+    var body: some View {
+        HStack{
+            VStack{
+                TextField("Delivery address", text: $addressLine)
+                    .padding(.horizontal)
+                    .frame(height: 55)
+               
+                Divider().background(Color.blue)
+                
+                    
+            }.frame(width: 300)
+            Image(systemName: "pencil")
+                .foregroundColor(.blue).bold()
+        }.padding()
+    }
+}
 
 #Preview {
     CheckoutView()

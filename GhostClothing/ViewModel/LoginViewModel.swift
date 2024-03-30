@@ -14,7 +14,8 @@ class LoginViewModel : ObservableObject {
     @Published var showError : Bool = false
     @Published var errorMessage : String = ""
     @Published var success : Bool = false
-   
+    @Published var isShowingSignup = false
+    @Published var showSignupScreen = false
     
     func verifyLogin(){
         if username.isEmpty || password.isEmpty {

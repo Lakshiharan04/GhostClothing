@@ -17,6 +17,18 @@ struct CartView: View {
                     }
                 }
                 .padding()
+                Button(action: {
+                    // Action when the button is tapped
+                }) {
+                    HStack {
+                        Image(systemName: "trash")
+                            .foregroundColor(.red)
+                        
+                        Text("Remove all")
+                            .fontWeight(.bold)
+                            .foregroundColor(.red)
+                    }
+                }.padding()
                 
                 SummaryView()
                 
@@ -53,21 +65,7 @@ struct StarterView: View {
                 .font(.title)
                 .fontWeight(.bold)
                 .foregroundColor(.blue)
-            
-            Spacer()
-            
-            Button(action: {
-                // Action when the button is tapped
-            }) {
-                HStack {
-                    Image(systemName: "trash")
-                        .foregroundColor(.red)
-                    
-                    Text("Remove all")
-                        .fontWeight(.bold)
-                        .foregroundColor(.red)
-                }
-            }
+     
         }
     }
 }

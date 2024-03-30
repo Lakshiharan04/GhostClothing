@@ -40,7 +40,7 @@ struct HomeView: View {
             }
             .tabViewStyle(DefaultTabViewStyle())
             .edgesIgnoringSafeArea(.all)
-        
+            .navigationBarBackButtonHidden(true)
             
             
         }
@@ -61,7 +61,7 @@ struct SecondView: View {
 
 struct ThirdView: View {
     var body: some View {
-      Text("favourits")
+      FavouritesView()
     }
 }
 
