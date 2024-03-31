@@ -10,7 +10,7 @@ import SwiftUI
 struct SplashScreen: View {
     
     @State private var isActive = false
-    @State private var size = 0.8
+    @State private var size = 0.1
     @State private var opacity = 0.5
         
     var body: some View {
@@ -20,17 +20,16 @@ struct SplashScreen: View {
                     } else {
                         VStack {
                             VStack(spacing: 16) {
-                                Image(systemName: "hare.fill")
-                                    .font(.system(size: 80))
-                                    .foregroundColor(.blue)
-                                Text("GHOST CLOTHING")
-                                    .font(Font.custom("julius sans one", size: 26))
-                                    .foregroundColor(.black.opacity(0.80))
+                                Image("LOGO_MAIN")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: UIScreen.main.bounds.width * 0.5)
+            
                             }
                             .scaleEffect(size)
                             .opacity(opacity)
                             .onAppear {
-                                withAnimation(.easeIn(duration: 5.5)) {
+                                withAnimation(.easeIn(duration: 3.5)) {
                                     self.size = 0.9
                                     self.opacity = 1.00
                                 }

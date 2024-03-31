@@ -1,106 +1,120 @@
-//
-//  ProductsView.swift
-//  GhostClothing
-//
-//  Created by NIBMPC04PC06 on 2024-03-30.
-//
-
 import SwiftUI
+import URLImage
 
 struct ProductsView: View {
     @State private var search: String = ""
     @State private var isEditing = false
-    @State private var selectedButton: String?
+    @State private var selectedButton: String? = "All"
     @State private var showProductDetails = false
+    @StateObject var productViewModel = ProductViewModel()
+    @State public var id: String
+    let categories = ["All", "T-shirt", "Shirts", "Over sized tee", "Jeans", "Track pants", "Shorts"]
     let categoryName: String
-
     
-    struct Product {
-            let name: String
-            let imageName: String
-            let price: Double
+    var filteredProducts: [ProductModel] {
+        var filtered = productViewModel.products
+        let selectedCategory = selectedButton
+        if  selectedCategory != "All" {
+            filtered = filtered.filter { $0.categoryName == selectedCategory }
         }
-
-        let products: [Product] = [
-            Product(name: "Rayon Printed Shirt",  imageName: "odelshirt", price: 2500.00),
-            Product(name: "Casual T-shirt", imageName: "levistshirt",  price: 2000.00)
-        ]
+        
+        if !search.isEmpty {
+            filtered = filtered.filter { $0.productName.lowercased().contains(search.lowercased()) }
+        }
+        if !search.isEmpty {
+            filtered = filtered.filter { $0.categoryName.lowercased().contains(search.lowercased()) }
+        }
+        
+        return filtered
+    }
+    
+   
+    
     var body: some View {
-        VStack{
+        VStack {
+            Text("All Products").font(.system(size: 22))
+            Text("Category: \(selectedButton ?? "All")")
             
-                Text("All Products").font(.system(size: 22))
-                Text("Category: \(categoryName)")
-       
-            
+            // Search Bar
             ZStack(alignment: .trailing) {
-                        RoundedRectangle(cornerRadius: 15)
-                            .stroke(lineWidth: 0.5)
-                            .frame(width: 350, height: 50)
-                            .padding(.horizontal, 48)
-                        
-                        HStack {
-                            Image(systemName: "magnifyingglass")
-                                .foregroundColor(.gray)
-                                .offset(x:60) // Adjust the padding as needed
-                            
-                            TextField("Search", text: $search, onEditingChanged: { editing in
-                                isEditing = editing
-                            })
-                            .padding(.horizontal, 56)
-                            .padding(.trailing, 48) 
-                            // Adjust the padding as needed
-                            
-                            if isEditing && !search.isEmpty {
-                                Button(action: {
-                                    search = ""
-                                }) {
-                                    Image(systemName: "multiply.circle.fill")
-                                        .foregroundColor(.blue)
-                                }
-                                .offset(x:-70) // Adjust the padding as needed
-                            }
+                RoundedRectangle(cornerRadius: 15)
+                    .stroke(lineWidth: 0.5)
+                    .frame(width: 350, height: 50)
+                    .padding(.horizontal, 48).foregroundColor(.blue)
+                
+                HStack {
+                    Image(systemName: "magnifyingglass")
+                        .foregroundColor(.blue)
+                        .offset(x:60) // Adjust the padding as needed
+                    
+                    TextField("Search", text: $search, onEditingChanged: { editing in
+                        isEditing = editing
+                    })
+                    .padding(.horizontal, 56)
+                    .padding(.trailing, 48)
+                    
+                    if isEditing && !search.isEmpty {
+                        Button(action: {
+                            search = ""
+                        }) {
+                            Image(systemName: "multiply.circle.fill")
+                                .foregroundColor(.blue)
+                        }
+                        .offset(x:-70) // Adjust the padding as needed
+                    }
+                }
+            }
+            
+            // Category Buttons
+            ScrollView(.horizontal) {
+                HStack(spacing: 16) {
+                    ForEach(categories, id: \.self) { title in
+                        Button(action: {
+                            selectedButton = title
+                            // Implement category filtering logic here
+                        }) {
+                            Text(title)
+                                .padding(.horizontal, 15)
+                                .padding(.vertical, 8)
+                                .foregroundColor(selectedButton == title ? .white : .black)
+                                .background(selectedButton == title ? Color.blue : Color.white)
+                                .cornerRadius(8)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 8)
+                                        .stroke(Color.blue, lineWidth: 0.5)
+                                )
                         }
                     }
-
+                }.padding()
+            }
             
-            ScrollView(.horizontal) {
-                       HStack(spacing: 20) {
-                           ForEach(["T-Shirts", "Shirts", "Over Sized Tees", "Jeans", "Track pants", "Shorts"], id: \.self) { title in
-                               Button(action: {
-                                   selectedButton = title
-                               }) {
-                                   Text(title)
-                                       .padding(.horizontal, 15)
-                                       .padding(.vertical, 8)
-                                       .foregroundColor(selectedButton == title ? .white : .black)
-                                       .background(selectedButton == title ? Color.blue : Color.white)
-                                       .cornerRadius(8)
-                                       .overlay(
-                                           RoundedRectangle(cornerRadius: 8)
-                                            .stroke(Color.blue, lineWidth: 0.5)
-                                       )
-                               }
-                           }
-                       }.padding()
-                       
-                   }
-            
+            // Product Grid
             ScrollView {
                 LazyVGrid(columns: [GridItem(.flexible(), spacing: 16), GridItem(.flexible(), spacing: 16)], spacing: 16) {
-                    ForEach(products, id: \.name) { product in
-                        Button {
+                    ForEach(filteredProducts) { product in
+                        Button(action: {
+                            // Show product details
                             showProductDetails = true
-                        } label: {
+                        }) {
+                            NavigationLink(destination: DetailedProductView(id: product.id)){
                             VStack {
-                                Image(product.imageName)
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 150, height: 250)
-                                    .cornerRadius(8)
-                                Text(product.name)
+                                // Product Image (Placeholder)
+                                URLImage(URL(string: product.image)!) { image in
+                                    image
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 150, height: 250)
+                                        .cornerRadius(8)
+                                }
+                                
+                                Text(product.productName)
                                     .padding(.bottom, 4)
                                     .background(Color.white)
-                                Text("Rs.\(product.price, specifier: "%.2f")")
+                                Text(product.categoryName)
+                                    .padding(.bottom, 4)
+                                    .background(Color.white)
+                                
+                                Text("Rs.\(product.price)")
                                     .font(.subheadline)
                                     .foregroundColor(.gray)
                             }
@@ -108,23 +122,26 @@ struct ProductsView: View {
                             .padding(8)
                             .cornerRadius(8)
                         }
-                        .buttonStyle(PlainButtonStyle())
-                        .sheet(isPresented: $showProductDetails) {
-                            DetailedProductView()
                         }
+                        .buttonStyle(PlainButtonStyle())
+                        //.sheet(isPresented: $showProductDetails) {
+                            //DetailedProductView(productID: product.id)
+                            // You need to create DetailedProductView and pass the selected product
+                        //}
                     }
-                     }
-                   }
-
-            
-            
-            Spacer()
-        }//end of top vstack
+                }
+            }
+        }
+        .onAppear {
+            // Fetch all products when the view appears
+            productViewModel.getAllProducts()
+        }
         .navigationBarBackButtonHidden(false)
     }
-
 }
 
 #Preview {
-    ProductsView(categoryName: "") 
+    ProductsView(id: "", categoryName: "")
+        .environmentObject(ProductViewModel())
 }
+

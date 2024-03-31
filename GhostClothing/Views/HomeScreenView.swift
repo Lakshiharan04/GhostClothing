@@ -20,7 +20,7 @@ struct HomeScreenView: View {
                                 .foregroundColor(.blue).bold()
                         }
                     }
-                    HStack {
+                   /* HStack {
                         TextField("Search", text: $text)
                             .padding(8)
                             .background(Color(.systemGray5))
@@ -33,19 +33,19 @@ struct HomeScreenView: View {
                                 .foregroundColor(.blue)
                         }
                         .padding(.trailing)
-                    }
+                    }*/
                     
                     
                     
                     ScrollView {
                         
-                        HeaderView(images: ["Header01", "Header02"])
+                        HeaderView(images: ["Slider01", "Slider02","Slider03"])
                         
                         CategoriesView()
                         
                         VStack(spacing: 15) {
-                            HStack(spacing: 225) {
-                                Text("Just Arrived").bold().font(.headline).foregroundColor(.blue)
+                            HStack(spacing: 25) {
+                                Text("View All Of Our Collections").bold().font(.headline).foregroundColor(.blue)
                                 Button(action: {
                                     isActive = true
                                     
@@ -54,7 +54,7 @@ struct HomeScreenView: View {
                                         .foregroundColor(.blue).bold()
                                 })
                             }
-                            NavigationLink(destination: ProductsView(categoryName: "") , isActive: $isActive) {
+                            NavigationLink(destination: ProductsView(id:"",categoryName: "") , isActive: $isActive) {
                                 EmptyView()
                             }
                             .hidden()
@@ -72,24 +72,7 @@ struct HomeScreenView: View {
                             .padding()
                         }
                         .padding()
-                        VStack(spacing: 15) {
-                            HStack(spacing: 180) {
-                                Text("Feature Products").bold().font(.headline).foregroundColor(.blue)
-                                Button(action: {}, label: {
-                                    Image(systemName: "arrow.right")
-                                        .foregroundColor(.blue).bold()
-                                })
-                            }
-                            ScrollView(.horizontal, showsIndicators: false) {
-                                HStack(spacing: 10) {
-                                    ForEach(0..<10) { index in
-                                        CardView(imageName: "dress\(index + 1)")
-                                    }
-                                }
-                                .padding()
-                            }
-                        }
-                       
+     
                     }
                     
                 }
@@ -106,23 +89,29 @@ struct HeaderView: View {
 
     var body: some View {
         VStack {
-            TabView(selection: $currentIndex) {
-                ForEach(0..<images.count, id: \.self) { index in
-                    Image(images[index])
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        .tag(index)
+            ScrollView(.horizontal) {
+                HStack(spacing: 15) {
+                    ForEach(0..<images.count, id: \.self) { index in
+                        Image(images[index])
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: UIScreen.main.bounds.width)
+                            .tag(index)
+                    }
+                }
+                .frame(width: UIScreen.main.bounds.width * CGFloat(images.count), alignment: .leading)
+            }
+            .onReceive(timer) { _ in
+                withAnimation {
+                    let nextIndex = (currentIndex + 1) % images.count
+                    currentIndex = nextIndex
                 }
             }
-            .tabViewStyle(PageTabViewStyle(indexDisplayMode: .automatic))
-            .onReceive(timer) { _ in
-                currentIndex = (currentIndex + 1) % images.count
-            }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-        }
+        }.padding()
     }
 }
+
+
 
 
 struct CardView: View {
@@ -147,9 +136,9 @@ struct CardView: View {
                                 .scaledToFit()
                                 .frame(width: 120, height: 140)
                             VStack(alignment: .leading) {
-                                Text("Women's shirt")
+                                Text("Men's shirt")
                                     .font(.system(size: 16))
-                                Text("Olive Green")
+                                Text("Colour")
                                     .font(.system(size: 13))
                                 Text("LKR 2500.00")
                                     .font(.system(size: 12))
@@ -159,7 +148,7 @@ struct CardView: View {
             }
             .buttonStyle(PlainButtonStyle())
             .sheet(isPresented: $showProductDetails) {
-                DetailedProductView()
+                DetailedProductView(id: "")
             }
         }
         .frame(width: 150, height: 150)
@@ -203,7 +192,7 @@ struct CategoryButton: View {
                         CategoryButton(categoryName: category) {
                             // Navigate to all products view with category name
                             // You can replace NavigationLink with your own navigation method
-                            NavigationLink(destination: ProductsView(categoryName: category)) {
+                            NavigationLink(destination: ProductsView(id: "",categoryName: category)) {
                                 Text(category)
                             }
                         }
@@ -220,6 +209,7 @@ struct CategoryButton: View {
 struct HomeScreenView_Previews: PreviewProvider {
     static var previews: some View {
         HomeScreenView()
+           
     }
 }
 

@@ -11,7 +11,7 @@ struct CartView: View {
                 
                 ScrollView(.vertical, showsIndicators: false) {
                     VStack(spacing: 10) {
-                        ForEach(0..<3) { _ in
+                        ForEach(0..<1) { _ in
                             CartProductView()
                         }
                     }
@@ -82,10 +82,10 @@ struct CartProductView: View {
                     .frame(width: 100, height: 100)
                 
                 VStack(alignment: .leading) {
-                    Text("Women's shirt")
+                    Text("Men's collction")
                         .font(.system(size: 16))
                     
-                    Text("Olive Green")
+                    Text("Color")
                         .font(.system(size: 13))
                     
                     Text("Size || M")

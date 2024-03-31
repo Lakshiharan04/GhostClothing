@@ -19,7 +19,7 @@ struct FavouritesView: View {
                         }
                         .buttonStyle(PlainButtonStyle())
                         .sheet(isPresented: $showProductDetails) { // Change variable name to start with lowercase
-                            DetailedProductView()
+                           // DetailedProductView()
                         }
                     }
                 }
@@ -52,10 +52,10 @@ struct FavProductView: View {
                     .frame(width: 100, height: 100)
                 
                 VStack(alignment: .leading, spacing: 5) {
-                    Text("Women's shirt")
+                    Text("Men's collection")
                         .font(.system(size: 16)).foregroundColor(.black)
                     
-                    Text("Olive Green")
+                    Text("Color")
                         .font(.system(size: 13)).foregroundColor(.black)
                     
                     Text("Size || M")
