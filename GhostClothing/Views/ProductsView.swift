@@ -19,11 +19,11 @@ struct ProductsView: View {
         }
         
         if !search.isEmpty {
-            filtered = filtered.filter { $0.productName.lowercased().contains(search.lowercased()) }
-        }
-        if !search.isEmpty {
-            filtered = filtered.filter { $0.categoryName.lowercased().contains(search.lowercased()) }
-        }
+                filtered = filtered.filter {
+                    $0.productName.localizedCaseInsensitiveContains(search) ||
+                    $0.categoryName.localizedCaseInsensitiveContains(search)
+                }
+            }
         
         return filtered
     }
@@ -96,7 +96,7 @@ struct ProductsView: View {
                             // Show product details
                             showProductDetails = true
                         }) {
-                            NavigationLink(destination: DetailedProductView(id: product.id)){
+                            NavigationLink(destination: DetailedProductView(id: product.id, vm: ProductViewModel(), VMCart: CartViewModel())){
                             VStack {
                                 // Product Image (Placeholder)
                                 URLImage(URL(string: product.image)!) { image in
@@ -135,6 +135,7 @@ struct ProductsView: View {
         .onAppear {
             // Fetch all products when the view appears
             productViewModel.getAllProducts()
+           // selectedButton = categoryName
         }
         .navigationBarBackButtonHidden(false)
     }

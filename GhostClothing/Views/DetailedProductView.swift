@@ -10,37 +10,43 @@ import URLImage
 
 struct DetailedProductView: View {
     @State private var selectedButton: String?
-    @State private var vm: ProductViewModel = ProductViewModel()
+    @StateObject private var vm: ProductViewModel = ProductViewModel()
+    @StateObject private var VMCart: CartViewModel = CartViewModel()
+    @State private var isActive = false
     let id: String
     
-    init(id: String){
-        self.id = id
-        self.vm = ProductViewModel()
-        vm.getProductByID(for: id)
-    }
+    init(id: String, vm: ProductViewModel, VMCart: CartViewModel){
+           self.id = id
+           _vm = StateObject(wrappedValue: vm)
+           _VMCart = StateObject(wrappedValue: VMCart)
+           vm.getProductByID(for: id)
+       }
+    
     var body: some View {
-        VStack{
-            if let products = vm.products.first(where: {$0.id == id}){
+        VStack {
+            if let products = vm.products.first(where: {$0.id == id}) {
                 URLImage(URL(string: products.image)!){ image in
-                        image
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 350, height: 500) // Set the desired width and height for the larger image
-                        .cornerRadius(10)
-                        .padding()
+                    image
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 350, height: 400) // Set the desired width and height for the larger image
+                    .cornerRadius(10)
+                    .padding()
                 }
-      
+
                 VStack(alignment: .leading) {
                     Text(products.productName)
                         .font(.title)
-                        .padding(.bottom, 4)
+                        .padding(.leading)
                         .background(Color.white)
                     
                     Text(products.categoryName)
                         .font(.subheadline)
+                        .padding(.leading)
                         .foregroundColor(.gray)
-                }.offset(x:-50)
+                }//.offset(x:-50)
                 
+                // Ensure the HStack is visible and properly aligned
                 HStack(spacing: 20) {
                     ForEach(["S", "M", "L", "XL", "XXL"], id: \.self) { title in
                         Button(action: {
@@ -59,18 +65,25 @@ struct DetailedProductView: View {
                         }
                     }
                 }
+                .padding(.bottom,55) // Add padding to ensure space between the HStack and the "Add Cart" button
             }
-        }
+        }.frame(width: 350, height: 500) // Set the VStack to have a fixed width and height
+        .padding()
+
             
-                Button(action: {
-                    
-                }, label: {
-                    Image(systemName: "heart").bold().font(.system(size: 25)).foregroundColor(.pink)
-                    Text("Add to Favourite").foregroundColor(.pink)
-                }).padding()
+        Button(action: {
+            
+        }, label: {
+            Image(systemName: "heart").bold().font(.system(size: 25)).foregroundColor(.pink)
+            Text("Add to Favourite").foregroundColor(.pink)
+        }).padding()
             
             Button(action: {
-                
+                if let product = vm.products.first(where: {$0.id == id}) {
+                    VMCart.addToCart(product)
+                    isActive = true
+                }
+        
             }) {
                 Text("Add Cart")
                     .padding()
@@ -79,7 +92,12 @@ struct DetailedProductView: View {
                     .foregroundColor(.white)
                     .font(.headline)
                     .cornerRadius(10)
-            }
+            }.padding()
+        NavigationLink(destination: CartView(), isActive: $isActive) {
+                       EmptyView()
+        }.hidden()
+            .navigationBarBackButtonHidden(false)
+
             
             Spacer()
 
@@ -99,9 +117,9 @@ struct DetailedProductView: View {
 
 
 #Preview {
-    DetailedProductView(id: "")
-        
+    DetailedProductView(id: "", vm: ProductViewModel(), VMCart: CartViewModel())
 }
+
 
 /*import SwiftUI
 

@@ -1,9 +1,12 @@
 import SwiftUI
+import URLImage
 
 struct HomeScreenView: View {
     @State private var text: String = ""
     @State private var showProductDetails = false
     @State private var isActive = false
+    @ObservedObject var viewModel = ProductViewModel()
+    @Binding var isTabViewHidden: Bool
     
 
     var body: some View {
@@ -41,7 +44,8 @@ struct HomeScreenView: View {
                         
                         HeaderView(images: ["Slider01", "Slider02","Slider03"])
                         
-                        CategoriesView()
+                            //CategoriesView()
+                            IntroductionView()
                         
                         VStack(spacing: 15) {
                             HStack(spacing: 25) {
@@ -64,14 +68,14 @@ struct HomeScreenView: View {
         
                         
                         ScrollView(.horizontal, showsIndicators: false) {
-                            HStack(spacing: 10) {
-                                ForEach(0..<10) { index in
-                                    CardView(imageName: "dress\(index + 1)")
-                                }
-                            }
-                            .padding()
-                        }
-                        .padding()
+                                         HStack(spacing: 10) {
+                                             ForEach(viewModel.getRandomProducts(count: 10), id: \.id) { product in
+                                                 CardView(product: product)
+                                             }
+                                         }
+                                         .padding()
+                                     }
+                                     .padding()
      
                     }
                     
@@ -111,50 +115,51 @@ struct HeaderView: View {
     }
 }
 
-
-
+struct IntroductionView: View {
+    var body: some View {
+        /*@START_MENU_TOKEN@*//*@PLACEHOLDER=Hello, world!@*/Text("Hello, world!")/*@END_MENU_TOKEN@*/
+    }
+}
 
 struct CardView: View {
-    var imageName: String
+    var product: ProductModel
     @State private var showProductDetails = false
 
     var body: some View {
-        ZStack {
-            Button(action: {
-                showProductDetails = true
-            }) {
+        NavigationLink(destination: DetailedProductView(id: product.id, vm: ProductViewModel(), VMCart: CartViewModel())){
+            ZStack {
                 RoundedRectangle(cornerRadius: 10)
                     .frame(height: 200)
-                    .frame(width: 150)
+                    .frame(width: 160)
                     .foregroundColor(.white)
                     .padding(30)
                     .shadow(radius: 2)
                     .overlay {
                         VStack {
-                            Image(imageName)
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 120, height: 140)
+                            URLImage(URL(string: product.image)!) { image in
+                                image
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 120, height: 140)
+                            }
                             VStack(alignment: .leading) {
-                                Text("Men's shirt")
-                                    .font(.system(size: 16))
-                                Text("Colour")
+                                Text(product.productName) // Assuming ProductModel has a name property
+                                    .font(.system(size: 12))
+                                Text(product.categoryName) // Assuming ProductModel has a description property
                                     .font(.system(size: 13))
-                                Text("LKR 2500.00")
+                                Text("\(product.price) LKR") // Assuming ProductModel has a price property
                                     .font(.system(size: 12))
                             }
                         }
                     }
             }
-            .buttonStyle(PlainButtonStyle())
-            .sheet(isPresented: $showProductDetails) {
-                DetailedProductView(id: "")
-            }
+            .frame(width: 150, height: 150)
+            .padding()
         }
-        .frame(width: 150, height: 150)
-        .padding()
     }
 }
+
+
 struct CategoryButton: View {
     let categoryName: String
     let action: () -> Void
@@ -177,6 +182,7 @@ struct CategoryButton: View {
 
 
     struct CategoriesView: View {
+        @State private var isActive = false
         let categories = ["T-Shirts", "Shirts", "Over Sized Tees", "Jeans", "Track pants", "Shorts"]
         let columns = [
             GridItem(.flexible()),
@@ -192,8 +198,8 @@ struct CategoryButton: View {
                         CategoryButton(categoryName: category) {
                             // Navigate to all products view with category name
                             // You can replace NavigationLink with your own navigation method
-                            NavigationLink(destination: ProductsView(id: "",categoryName: category)) {
-                                Text(category)
+                            NavigationLink(destination: ProductsView(id: "", categoryName: category), isActive: $isActive) {
+                                EmptyView()
                             }
                         }
                     }
@@ -208,7 +214,7 @@ struct CategoryButton: View {
 
 struct HomeScreenView_Previews: PreviewProvider {
     static var previews: some View {
-        HomeScreenView()
+        HomeScreenView(isTabViewHidden: .constant(false))
            
     }
 }

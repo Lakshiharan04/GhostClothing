@@ -8,48 +8,44 @@
 import SwiftUI
 
 struct HomeView: View {
+    @State private var isTabViewHidden = false
     var body: some View {
-       
+         VStack {
+             if !isTabViewHidden {
+                 TabView {
+                     FirstView()
+                         .tabItem {
+                             Image(systemName: "house")
+                             Text("Home")
+                         }
+                     SecondView()
+                         .tabItem {
+                             Image(systemName: "person")
+                             Text("Account")
+                         }
+                     ThirdView()
+                         .tabItem {
+                             Image(systemName: "heart")
+                             Text("Favourits")
+                         }
+                     FourthView()
+                         .tabItem {
+                             Image(systemName: "cart")
+                             Text("Cart")
+                         }
+                 }
+                 .tabViewStyle(DefaultTabViewStyle())
+                 .edgesIgnoringSafeArea(.all)
+                 .navigationBarBackButtonHidden(true)
+             }
+         }
+     }
+ }
             
-        
-            TabView {
-                FirstView()
-                    .tabItem {
-                        Image(systemName: "house")
-                        Text("Home")
-                    }
-                SecondView()
-                    .tabItem {
-                        Image(systemName: "person")
-                        Text("Account")
-                    }
-                
-                
-                ThirdView()
-                    .tabItem {
-                        Image(systemName: "heart")
-                        Text("Favourits")
-                    }
-                
-                FourthView()
-                    .tabItem {
-                        Image(systemName: "cart")
-                        Text("Cart")
-                    }
-                
-            }
-            .tabViewStyle(DefaultTabViewStyle())
-            .edgesIgnoringSafeArea(.all)
-            .navigationBarBackButtonHidden(true)
-            
-            
-        }
-    
-            
-    }
+
 struct FirstView: View {
     var body: some View {
-        HomeScreenView()
+        HomeScreenView(isTabViewHidden: .constant(false))
     }
 }
 

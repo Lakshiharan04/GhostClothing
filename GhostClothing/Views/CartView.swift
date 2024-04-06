@@ -1,8 +1,9 @@
 import SwiftUI
+import URLImage
 
 struct CartView: View {
     @ObservedObject var VMCart : CartViewModel = CartViewModel()
-   
+  
     
     var body: some View {
         NavigationView {
@@ -11,9 +12,9 @@ struct CartView: View {
                 
                 ScrollView(.vertical, showsIndicators: false) {
                     VStack(spacing: 10) {
-                        ForEach(0..<1) { _ in
-                            CartProductView()
-                        }
+                        ForEach(VMCart.cartItems, id: \.id) { product in
+                                                    CartProductView(product: product, cartViewModel: VMCart)
+                                                }
                     }
                 }
                 .padding()
@@ -54,6 +55,9 @@ struct CartView: View {
             .padding()
             .navigationBarHidden(true)
             .navigationTitle("Back")
+            .onAppear{
+                VMCart.loadCartState()
+            }
         }
     }
 }
@@ -72,39 +76,54 @@ struct StarterView: View {
 
 struct CartProductView: View {
     @State private var count = 1
+    var product: ProductModel
+        @ObservedObject var VMCart: CartViewModel
+    @State private var quantity: Int
+        
+    init(product: ProductModel, cartViewModel: CartViewModel) {
+            self.product = product
+            self.VMCart = cartViewModel
+        self._quantity = State(initialValue: cartViewModel.cartQuantities[product.id] ?? 1)
+        }
     
     var body: some View {
         VStack(spacing: 10) {
             HStack (spacing:15){
-                Image("dress1")
-                    .resizable()
-                    .scaledToFit()
+                URLImage(URL(string: product.image)!) { image in
+                    image
+                        .resizable()
+                        .scaledToFit()
+                }
                     .frame(width: 100, height: 100)
                 
                 VStack(alignment: .leading) {
-                    Text("Men's collction")
+                    Text(product.productName)
                         .font(.system(size: 16))
-                    
-                    Text("Color")
+                    Text("Q: \(quantity)")
                         .font(.system(size: 13))
                     
-                    Text("Size || M")
+                    Text(product.categoryName)
+                        .font(.system(size: 13))
+                    
+                    Text("Rs.\(product.price)")
                         .font(.system(size: 12))
                 }
                 
                 Spacer()
-                VStack(spacing: 15){
-                    StepperView(count: $count)
-                    Button(action: {
-                        // Action when the button is tapped
-                    }) {
-                        HStack{
-                            Image(systemName: "trash")
-                                .foregroundColor(.red)
-
-                        }
-                    }
-                }
+                VStack(spacing: 15) {
+                    Stepper("", value: $quantity) {_ in 
+                                           Text("Qty: \(quantity)")
+                                       }
+                                    Button(action: {
+                                        // Action when the button is tapped
+                                        VMCart.updateQuantity(productID: product.id, quantity: quantity)
+                                        VMCart.removeFromCart(productID: product.id)
+                                    }) {
+                                        Image(systemName: "trash")
+                                            .foregroundColor(.red)
+                                    }
+                                }
+                            
             }
             
             Divider()
@@ -113,7 +132,7 @@ struct CartProductView: View {
     }
 }
 
-struct StepperView: View {
+/*struct StepperView: View {
     @Binding var count: Int
     
     var body: some View {
@@ -136,7 +155,7 @@ struct StepperView: View {
         }
         .font(.system(size: 18))
     }
-}
+}*/
 
 struct SummaryView: View {
     @State private var isTextFieldVisible = false
@@ -219,6 +238,7 @@ struct SummaryView: View {
 
 
 struct ContentView_Previews: PreviewProvider {
+    
     static var previews: some View {
         NavigationView {
             CartView()

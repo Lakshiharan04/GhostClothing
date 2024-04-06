@@ -32,6 +32,11 @@ class ProductViewModel: ObservableObject {
         }.resume()
     }
     
+    func getRandomProducts(count: Int) -> [ProductModel] {
+          var shuffledProducts = products.shuffled()
+          return Array(shuffledProducts.prefix(count))
+      }
+    
     func getProductByID(for id: String) {
         guard let url = URL(string: APIConstants.productByIDURL + id) else {
             print("Invalid URL")
@@ -55,5 +60,7 @@ class ProductViewModel: ObservableObject {
             }
         }.resume()
     }
+    
+  
 }
 
