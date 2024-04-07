@@ -8,6 +8,10 @@
 import SwiftUI
 
 struct CheckoutView: View {
+    @State private var isPaymentSuccessful = false
+    let totalAmount: Int
+    @State private var isShowingPaymentAlert = false
+    
     var body: some View {
         VStack(spacing:25){
             Text("Checkout").font(.system(size: 25)).bold()
@@ -26,10 +30,10 @@ struct CheckoutView: View {
                                 
                                 VStack(alignment: .trailing, spacing: 5) {
                                     Text("Total amount").font(.system(size: 16))
-                                    Text("2950.00 LKR").font(.system(size: 16)).bold().strikethrough()
+                                    Text("\(totalAmount) LKR").font(.system(size: 16)).bold().strikethrough()
                                     Text("Coupon applied").font(.system(size: 11)).foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
                                     Text("+Delivery charages").font(.system(size: 11))
-                                    Text("1950.00 LKR").font(.system(size: 20)).bold().foregroundColor(.blue)
+                                    Text("\(totalAmount) LKR").font(.system(size: 20)).bold().foregroundColor(.blue)
                                     
                                     Text("Including tax").font(.system(size: 10)).foregroundColor(.gray)
                                     
@@ -44,27 +48,18 @@ struct CheckoutView: View {
                     Addressbar()
                     
                     VStack{
-                        
                         Button(action: {
-                            
+                            isShowingPaymentAlert = true
+                            UserDefaults.standard.removeObject(forKey: "cartItems")
                         }) {
                             
                             Text( "Make Payment")
                                 .foregroundColor(.white)
-                                .padding(10)
+                                .padding(20)
                                 .background(.blue)
                                 .cornerRadius(5)
-                                
-                                
-                        }
-                        Button(action: {
                             
-                        }) {
-                            
-                            Text( "Cancel")
-                                .foregroundColor(.gray).underline()
                         }
-                        
                     }
                     
                     Spacer()
@@ -73,10 +68,20 @@ struct CheckoutView: View {
                 }
             }
         }
-        
+        .navigationBarHidden(true)
+        .padding()
+        .alert(isPresented: $isShowingPaymentAlert) {
+            Alert(title: Text("Payment Successful"), message: Text("Your payment has been successful."), primaryButton: .default(Text("OK")) {
+                // Restart the app to the Home Screen without a splash screen
+                if let window = UIApplication.shared.windows.first {
+                    window.rootViewController = UIHostingController(rootView: ContentView())
+                    window.makeKeyAndVisible()
+                }
+            }, secondaryButton: .cancel())
+        }
         
         Spacer()
-    }
+    } 
 }
 
 struct AddCardView: View {
@@ -204,5 +209,5 @@ struct Addressbar: View {
 }
 
 #Preview {
-    CheckoutView()
+    CheckoutView(totalAmount:0)
 }

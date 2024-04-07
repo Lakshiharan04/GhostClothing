@@ -23,21 +23,7 @@ struct HomeScreenView: View {
                                 .foregroundColor(.blue).bold()
                         }
                     }
-                   /* HStack {
-                        TextField("Search", text: $text)
-                            .padding(8)
-                            .background(Color(.systemGray5))
-                            .cornerRadius(8)
-                            .padding(.horizontal)
-                        Button(action: {
-                            self.text = ""
-                        }) {
-                            Image(systemName: "xmark.circle.fill")
-                                .foregroundColor(.blue)
-                        }
-                        .padding(.trailing)
-                    }*/
-                    
+                   
                     
                     
                     ScrollView {
@@ -49,14 +35,8 @@ struct HomeScreenView: View {
                         
                         VStack(spacing: 15) {
                             HStack(spacing: 25) {
-                                Text("View All Of Our Collections").bold().font(.headline).foregroundColor(.blue)
-                                Button(action: {
-                                    isActive = true
-                                    
-                                }, label: {
-                                    Image(systemName: "arrow.right")
-                                        .foregroundColor(.blue).bold()
-                                })
+                                Text("Feature Products!").bold().font(.headline).foregroundColor(.black)
+                               
                             }
                             NavigationLink(destination: ProductsView(id:"",categoryName: "") , isActive: $isActive) {
                                 EmptyView()
@@ -89,8 +69,7 @@ struct HomeScreenView: View {
 struct HeaderView: View {
     let images: [String]
     @State private var currentIndex = 0
-    let timer = Timer.publish(every: 3, on: .main, in: .common).autoconnect() // Change the time interval as needed
-
+    let timer = Timer.publish(every: 3, on: .main, in: .common).autoconnect() 
     var body: some View {
         VStack {
             ScrollView(.horizontal) {
@@ -117,7 +96,16 @@ struct HeaderView: View {
 
 struct IntroductionView: View {
     var body: some View {
-        /*@START_MENU_TOKEN@*//*@PLACEHOLDER=Hello, world!@*/Text("Hello, world!")/*@END_MENU_TOKEN@*/
+        VStack{
+            Text("Welcome to Ghost clothing").font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
+                .padding(.leading).foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
+            Text("Discover the latest trends, shop stylish outfits, and elevate your wardrobe effortlessly. Enjoy a seamless shopping experience tailored just for you. Let's redefine your style, one tap at a time")
+                .font(.system(size: 13))
+                .padding().foregroundColor(.gray)
+            
+            
+            
+        }
     }
 }
 
@@ -145,6 +133,7 @@ struct CardView: View {
                             VStack(alignment: .leading) {
                                 Text(product.productName) // Assuming ProductModel has a name property
                                     .font(.system(size: 12))
+                                    .frame(width: 80, height: 10)
                                 Text(product.categoryName) // Assuming ProductModel has a description property
                                     .font(.system(size: 13))
                                 Text("\(product.price) LKR") // Assuming ProductModel has a price property

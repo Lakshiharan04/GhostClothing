@@ -20,14 +20,14 @@ struct HomeView: View {
                          }
                      SecondView()
                          .tabItem {
-                             Image(systemName: "person")
-                             Text("Account")
+                             Image(systemName: "basket.fill")
+                             Text("Shop")
                          }
-                     ThirdView()
+                     /*ThirdView()
                          .tabItem {
                              Image(systemName: "heart")
                              Text("Favourits")
-                         }
+                         }*/
                      FourthView()
                          .tabItem {
                              Image(systemName: "cart")
@@ -51,7 +51,7 @@ struct FirstView: View {
 
 struct SecondView: View {
     var body: some View {
-        ProfileView()
+        ProductsView(id: "", categoryName: "")
     }
 }
 
